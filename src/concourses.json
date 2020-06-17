@@ -1,0 +1,22 @@
+[  
+    {
+        "name": "megasena",
+        "link": "http://loterias.caixa.gov.br/wps/portal/loterias/landing/megasena/",
+        "nums": 6
+    },
+    {
+        "name": "lotofacil",
+        "link": "http://loterias.caixa.gov.br/wps/portal/loterias/landing/lotofacil/",
+        "nums": 15
+    },
+    {
+        "name": "quina",
+        "link": "http://loterias.caixa.gov.br/wps/portal/loterias/landing/quina/",
+        "nums": 5
+    },
+    {
+        "name": "lotomania",
+        "link": "http://loterias.caixa.gov.br/wps/portal/loterias/landing/lotomania/",
+        "nums": 20
+    }
+]

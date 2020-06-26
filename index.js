@@ -10,8 +10,17 @@ app.use('/js', express.static(__dirname + 'public/js'))
 app.use('/img', express.static(__dirname + 'public/img'))
 
 // Dynamic routes
-app.get('/profile', (req, res) => {
-    res.sendFile(__dirname + '/public/dynamic.html')
+app.get('/megasena', (req, res) => {
+    res.sendFile(__dirname + '/public/d_mega.html')
+})
+app.get('/quina', (req, res) => {
+    res.sendFile(__dirname + '/public/d_quina.html')
+})
+app.get('/lotofacil', (req, res) => {
+    res.sendFile(__dirname + '/public/d_lotfac.html')
+})
+app.get('/lotomania', (req, res) => {
+    res.sendFile(__dirname + '/public/d_lotman.html')
 })
 
 // Start the server

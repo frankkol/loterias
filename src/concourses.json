@@ -2,21 +2,25 @@
     {
         "name": "megasena",
         "link": "http://loterias.caixa.gov.br/wps/portal/loterias/landing/megasena/",
+        "linkHist": "http://localhost:3000/megasena/",
         "nums": 6
     },
     {
         "name": "lotofacil",
         "link": "http://loterias.caixa.gov.br/wps/portal/loterias/landing/lotofacil/",
+        "linkHist": "http://localhost:3000/lotofacil/",
         "nums": 15
     },
     {
         "name": "quina",
         "link": "http://loterias.caixa.gov.br/wps/portal/loterias/landing/quina/",
+        "linkHist": "http://localhost:3000/quina/",
         "nums": 5
     },
     {
         "name": "lotomania",
         "link": "http://loterias.caixa.gov.br/wps/portal/loterias/landing/lotomania/",
+        "linkHist": "http://localhost:3000/lotomania/",
         "nums": 20
     }
 ]

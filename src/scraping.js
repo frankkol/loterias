@@ -10,7 +10,21 @@ const lotomaniaSchema = require('./lotomaniaSchema')
 
 // Variables
 const regexConcourseDate = /Concurso\s(\d{4})\s+\((\S+)\)/g
-const conc = process.argv[2] || 0
+const lot = process.argv[2] || 0
+
+// Get Datetime
+function dt() {
+    var dateNow = new Date()
+    var day = ("0"+dateNow.getDate()).slice(-2)
+    var month = ("0"+dateNow.getMonth()).slice(-2)
+    var year = dateNow.getFullYear()
+    var hour = ("0"+dateNow.getHours()).slice(-2)
+    var minuts = ("0"+dateNow.getMinutes()).slice(-2)
+    var seconds = ("0"+dateNow.getSeconds()).slice(-2)
+ 
+    var dateFormat = `${day}-${month}-${year}T${hour}:${minuts}:${seconds}`
+    return dateFormat
+}
 
 // Extract data
 async function extractData(conc){
@@ -57,7 +71,8 @@ async function extractData(conc){
     browser.close()
 }
 
-async function persistDatabase(){
+// Persist Database
+async function persistDatabase(lot){
     const urlDatabase = 'mongodb://localhost'
     const portDatabase = '27017'
     const databases = 'loterias'
@@ -80,14 +95,14 @@ async function persistDatabase(){
         if(result){
             result.save(function (error, resultado){
                 if(error){
-                    console.log('Error save in database Mongodb' + error)
+                    console.log(`${dt()} > Error save in database Mongodb ${error}`)
                 }else{
-                    console.log(`Concourse ${objdata.concourse} of ${objdata.name.toUpperCase()} save success!`)
+                    console.log(`${dt()} > Concourse ${objdata.concourse} of ${objdata.name.toUpperCase()} save success!`)
                     // console.log(`Concourse save success!`)
                 }
             })
         }else{
-            console.log(`Concourse ${objdata.concourse} of ${objdata.name.toUpperCase()} already exists!`)
+            console.log(`${dt()} > Concourse ${objdata.concourse} of ${objdata.name.toUpperCase()} already exists!`)
             // console.log(`Concourse already exists!`)
         }
         return false
@@ -97,12 +112,12 @@ async function persistDatabase(){
         useNewUrlParser: true,
         useUnifiedTopology: true
     }).then(result => {
-        console.log(`Database Mongodb connected on port ${portDatabase} and database ${databases}`)
+        console.log(`${dt()} > Database Mongodb connected on port ${portDatabase} and database ${databases}`)
     }).catch(error => {
-        console.log('Error connect database Mongodb' + error)
+        console.log(`${dt()} > Error connect database Mongodb ${error}`)
     })
 
-    const objdata = await extractData(json[conc])
+    const objdata = await extractData(json[lot])
     let select, result = null
     if(objdata.concourse != null){
         if(objdata.name === 'megasena'){
@@ -186,8 +201,8 @@ async function persistDatabase(){
         }
         await persist(result, objdata)
     }else{
-        console.log(`Error scraping data ${json[conc]['name'].toUpperCase()}`)
+        console.log(`${dt()} > Error scraping data ${json[lot]['name'].toUpperCase()}`)
     }
 }
 
-persistDatabase()
+persistDatabase(lot)

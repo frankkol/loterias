@@ -5,9 +5,9 @@ const app = express()
 
 // Server Static files
 app.use(express.static('public'))
-app.use('/styles', express.static(__dirname + 'public/styles'))
-app.use('/scripts', express.static(__dirname + 'public/scripts'))
-app.use('/imgs', express.static(__dirname + 'public/imgs'))
+app.use('/css', express.static(__dirname + 'public/assets/css'))
+app.use('/js', express.static(__dirname + 'public/assets/js'))
+app.use('/img', express.static(__dirname + 'public/assets/img'))
 
 // Dynamic routes
 app.get('/', (req, res) => {

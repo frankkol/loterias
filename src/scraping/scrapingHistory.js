@@ -1,29 +1,12 @@
 // Imports
 const puppeteer = require('puppeteer')
 const cheerio = require('cheerio')
+const axios = require('axios')
 const json = require('../concourses.json')
-const mongoose = require('mongoose')
-const megasenaSchema = require('../schema/megasenaSchema')
-const quinaSchema = require('../schema/quinaSchema')
-const lotofacilSchema = require('../schema/lotofacilSchema')
-const lotomaniaSchema = require('../schema/lotomaniaSchema')
+const dt = require('../utils/dateTime')
 
 // Variables
 const lot = process.argv[2] || 0
-
-// Get Datetime
-function dt() {
-    var dateNow = new Date()
-    var day = ("0"+dateNow.getDate()).slice(-2)
-    var month = ("0"+dateNow.getMonth()).slice(-2)
-    var year = dateNow.getFullYear()
-    var hour = ("0"+dateNow.getHours()).slice(-2)
-    var minuts = ("0"+dateNow.getMinutes()).slice(-2)
-    var seconds = ("0"+dateNow.getSeconds()).slice(-2)
- 
-    var dateFormat = `${day}-${month}-${year}T${hour}:${minuts}:${seconds}`
-    return dateFormat
-}
 
 // Extract data
 async function extractData(conc){
@@ -70,136 +53,90 @@ async function extractData(conc){
 
 // Persist Database
 async function persistDatabase(lot){
-    const urlDatabase = 'mongodb://localhost'
-    const portDatabase = '27017'
-    const databases = 'loterias'
-    
-    const tblmegasena = mongoose.model('tbl_megasena', megasenaSchema)
-    const tblquina = mongoose.model('tbl_quina', quinaSchema)
-    const tbllotofacil = mongoose.model('tbl_lotofacil', lotofacilSchema)
-    const tbllotomania = mongoose.model('tbl_lotomania', lotomaniaSchema)
-    
-    function isEmpity(obj){
-        for(const prop in obj){
-            if(obj.hasOwnProperty(prop)){
-                return false
-            }
-        }
-        return true
-    }
 
     async function persist(result, objdata){
         if(result){
-            result.save(function (error, resultado){
-                if(error){
-                    console.log(`${dt()} > Error save in database Mongodb ${error}`)
-                }else{
-                    console.log(`${dt()} > Concourse ${objdata.concourse} of ${objdata.name.toUpperCase()} save success!`)
-                    // console.log(`Concourse save success!`)
-                }
+            axios.post('http://localhost:3000/save-concourse', result).then((res) => {
+                console.log(res.data)
             })
-        }else{
-            console.log(`Concourse ${objdata.concourse} of ${objdata.name.toUpperCase()} already exists!`)
-            // console.log(`Concourse already exists!`)
         }
         return false
     }
-    
-    mongoose.connect(`${urlDatabase}:${portDatabase}/${databases}`,{
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    }).then(result => {
-        console.log(`${dt()} > Database Mongodb connected on port ${portDatabase} and database ${databases}`)
-    }).catch(error => {
-        console.log(`${dt()} > Error connect database Mongodb ${error}`)
-    })
 
     const arrayData = await extractData(json[lot])
     for (const [idx, objdata] of arrayData.entries()) {
         let select, result = null
         if(objdata.concourse != null){
             if(objdata.name === 'megasena'){
-                select = await tblmegasena.find({concourse:objdata.concourse})
-                if(isEmpity(select)){
-                    result = new tblmegasena({
-                        concourse: objdata.concourse,
-                        date: objdata.date,
-                        onedozen: objdata.dozens[0],
-                        twodozen: objdata.dozens[1],
-                        tredozen: objdata.dozens[2],
-                        fourdozen: objdata.dozens[3],
-                        fivedozen: objdata.dozens[4],
-                        sixdozen: objdata.dozens[5],
-                    })
+                result = {
+                    concourse: objdata.concourse,
+                    date: objdata.date,
+                    onedozen: objdata.dozens[0],
+                    twodozen: objdata.dozens[1],
+                    tredozen: objdata.dozens[2],
+                    fourdozen: objdata.dozens[3],
+                    fivedozen: objdata.dozens[4],
+                    sixdozen: objdata.dozens[5]
                 }
             }else if(objdata.name === 'quina'){
-                select = await tblquina.find({concourse:objdata.concourse})
-                if(isEmpity(select)){
-                    result = new tblquina({
-                        concourse: objdata.concourse,
-                        date: objdata.date,
-                        onedozen: objdata.dozens[0],
-                        twodozen: objdata.dozens[1],
-                        tredozen: objdata.dozens[2],
-                        fourdozen: objdata.dozens[3],
-                        fivedozen: objdata.dozens[4],
-                    })
+                result = {
+                    concourse: objdata.concourse,
+                    date: objdata.date,
+                    onedozen: objdata.dozens[0],
+                    twodozen: objdata.dozens[1],
+                    tredozen: objdata.dozens[2],
+                    fourdozen: objdata.dozens[3],
+                    fivedozen: objdata.dozens[4],
                 }
             }else if(objdata.name === 'lotofacil'){
-                select = await tbllotofacil.find({concourse:objdata.concourse})
-                if(isEmpity(select)){
-                    result = new tbllotofacil({
-                        concourse: objdata.concourse,
-                        date: objdata.date,
-                        onedozen: objdata.dozens[0],
-                        twodozen: objdata.dozens[1],
-                        tredozen: objdata.dozens[2],
-                        fourdozen: objdata.dozens[3],
-                        fivedozen: objdata.dozens[4],
-                        sixdozen: objdata.dozens[5],
-                        sevendozen: objdata.dozens[6],
-                        eightdozen: objdata.dozens[7],
-                        ninedozen: objdata.dozens[8],
-                        tendozen: objdata.dozens[9],
-                        elevendozen: objdata.dozens[10],
-                        twelvedozen: objdata.dozens[11],
-                        thirteendozen: objdata.dozens[12],
-                        fourteendozen: objdata.dozens[13],
-                        fifteendozen: objdata.dozens[14],
-                    })
+                result = {
+                    concourse: objdata.concourse,
+                    date: objdata.date,
+                    onedozen: objdata.dozens[0],
+                    twodozen: objdata.dozens[1],
+                    tredozen: objdata.dozens[2],
+                    fourdozen: objdata.dozens[3],
+                    fivedozen: objdata.dozens[4],
+                    sixdozen: objdata.dozens[5],
+                    sevendozen: objdata.dozens[6],
+                    eightdozen: objdata.dozens[7],
+                    ninedozen: objdata.dozens[8],
+                    tendozen: objdata.dozens[9],
+                    elevendozen: objdata.dozens[10],
+                    twelvedozen: objdata.dozens[11],
+                    thirteendozen: objdata.dozens[12],
+                    fourteendozen: objdata.dozens[13],
+                    fifteendozen: objdata.dozens[14],
                 }
             }else if(objdata.name === 'lotomania'){
-                select = await tbllotomania.find({concourse:objdata.concourse})
-                if(isEmpity(select)){
-                    result = new tbllotomania({
-                        concourse: objdata.concourse,
-                        date: objdata.date,
-                        onedozen: objdata.dozens[0],
-                        twodozen: objdata.dozens[1],
-                        tredozen: objdata.dozens[2],
-                        fourdozen: objdata.dozens[3],
-                        fivedozen: objdata.dozens[4],
-                        sixdozen: objdata.dozens[5],
-                        sevendozen: objdata.dozens[6],
-                        eightdozen: objdata.dozens[7],
-                        ninedozen: objdata.dozens[8],
-                        tendozen: objdata.dozens[9],
-                        elevendozen: objdata.dozens[10],
-                        twelvedozen: objdata.dozens[11],
-                        thirteendozen: objdata.dozens[12],
-                        fourteendozen: objdata.dozens[13],
-                        fifteendozen: objdata.dozens[14],
-                        sixteendozen: objdata.dozens[15],
-                        seventeendozen: objdata.dozens[16],
-                        eighteendozen: objdata.dozens[17],
-                        nineteendozen: objdata.dozens[18],
-                        twentydozen: objdata.dozens[19],
-                    })
+                result = {
+                    concourse: objdata.concourse,
+                    date: objdata.date,
+                    onedozen: objdata.dozens[0],
+                    twodozen: objdata.dozens[1],
+                    tredozen: objdata.dozens[2],
+                    fourdozen: objdata.dozens[3],
+                    fivedozen: objdata.dozens[4],
+                    sixdozen: objdata.dozens[5],
+                    sevendozen: objdata.dozens[6],
+                    eightdozen: objdata.dozens[7],
+                    ninedozen: objdata.dozens[8],
+                    tendozen: objdata.dozens[9],
+                    elevendozen: objdata.dozens[10],
+                    twelvedozen: objdata.dozens[11],
+                    thirteendozen: objdata.dozens[12],
+                    fourteendozen: objdata.dozens[13],
+                    fifteendozen: objdata.dozens[14],
+                    sixteendozen: objdata.dozens[15],
+                    seventeendozen: objdata.dozens[16],
+                    eighteendozen: objdata.dozens[17],
+                    nineteendozen: objdata.dozens[18],
+                    twentydozen: objdata.dozens[19],
                 }
             }
             await persist(result, objdata)
         }else{
-            console.log(`${dt()} > Error scraping data ${json[conc]['name'].toUpperCase()}`)
+            console.log(`${dt.dt()} > Error scraping data ${json[conc]['name'].toUpperCase()}`)
         }
     }
 }

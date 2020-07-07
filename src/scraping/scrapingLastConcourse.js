@@ -1,27 +1,13 @@
 // Imports
 const puppeteer = require('puppeteer')
 const cheerio = require('cheerio')
+const axios = require('axios')
 const json = require('../concourses.json')
-const db = require("../database/db")
+const dt = require('../utils/dateTime')
 
 // Variables
 const regexConcourseDate = /Concurso\s(\d{4})\s+\((\S+)\)/g
 const lot = process.argv[2] || 0
-const datab = new db()
-
-// Get Datetime
-function dt() {
-    var dateNow = new Date()
-    var day = ("0"+dateNow.getDate()).slice(-2)
-    var month = ("0"+dateNow.getMonth()).slice(-2)
-    var year = dateNow.getFullYear()
-    var hour = ("0"+dateNow.getHours()).slice(-2)
-    var minuts = ("0"+dateNow.getMinutes()).slice(-2)
-    var seconds = ("0"+dateNow.getSeconds()).slice(-2)
- 
-    var dateFormat = `${day}-${month}-${year}T${hour}:${minuts}:${seconds}`
-    return dateFormat
-}
 
 // Extract data
 async function extractData(conc){
@@ -74,19 +60,39 @@ async function persistDatabase(lot){
     let select, result = null
     if(objdata.concourse != null){
         if(objdata.name === 'megasena'){
-            const values = [
-                objdata.concourse,
-                objdata.date,
-                objdata.dozens[0],
-                objdata.dozens[1],
-                objdata.dozens[2],
-                objdata.dozens[3],
-                objdata.dozens[4],
-                objdata.dozens[5]
-            ]
-            datab.insertNotRepeatConcourse(values)
+            const values = {
+                concourse: objdata.concourse,
+                date: objdata.date,
+                onedozen: objdata.dozens[0],
+                twodozen: objdata.dozens[1],
+                tredozen: objdata.dozens[2],
+                fourdozen: objdata.dozens[3],
+                fivedozen: objdata.dozens[4],
+                sixdozen: objdata.dozens[5]
+            }
+
+            axios.post('http://localhost:3000/save-concourse', values).then((res) => {
+                console.log(res.data)
+            })
         }
     }
 }
 
-// persistDatabase(lot)
+persistDatabase(lot)
+
+
+//Metodo para listar 1 result
+// axios.get('http://localhost:3000/search-results?search=1117').then(function(response){
+//     console.log(response.data)
+// })
+
+//Metodo para listar todos os results
+// axios.get('http://localhost:3000/search-all-results').then(function(response){
+//     console.log(response.data)
+// })
+
+//Metodo para inserir
+// axios.post('http://localhost:3000/save-concourse', conc)
+//   .then(function(response){
+//     console.log(response.data)
+// })

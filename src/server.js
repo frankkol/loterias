@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 
 app.get("/search-results", function(req, res) {
     const search = req.query.search
-    const querySelect = `SELECT * FROM tbl_mega WHERE concourse = ${search}`
+    const querySelect = `SELECT * FROM tbl_megasena WHERE concourse = ${search}`
     db.all(querySelect, function(err,rows) {
         if(err) {
             return console.log(err)
@@ -33,7 +33,7 @@ app.get("/search-results", function(req, res) {
 })
 
 app.get("/search-all-results", function(req, res) {
-    const querySelect = `SELECT * FROM tbl_mega`
+    const querySelect = `SELECT * FROM tbl_megasena`
     db.all(querySelect, function(err,rows) {
         if(err) {
             return console.log(err)
@@ -42,48 +42,132 @@ app.get("/search-all-results", function(req, res) {
     })
 })
 
+app.get("/search-last-results", function(req, res) {
+    const querySelectMega = `SELECT * FROM tbl_megasena WHERE concourse = (SELECT MAX(concourse) FROM tbl_megasena)`
+    const querySelectQuina = `SELECT * FROM tbl_quina WHERE concourse = (SELECT MAX(concourse) FROM tbl_quina)`
+    const querySelectLotofacil = `SELECT * FROM tbl_lotofacil WHERE concourse = (SELECT MAX(concourse) FROM tbl_lotofacil)`
+    const querySelectLotomania = `SELECT * FROM tbl_lotomania WHERE concourse = (SELECT MAX(concourse) FROM tbl_lotomania)`
+
+    // db.all(querySelectMega, function(err,rows) {
+    //     if(err) {
+    //         return console.log(err)
+    //     }
+    //     return res.send(rows)
+    // })
+
+    // db.all(querySelectQuina, function(err,rows) {
+    //     if(err) {
+    //         return console.log(err)
+    //     }
+    //     return res.send(rows)
+    // })
+
+    // db.all(querySelectLotofacil, function(err,rows) {
+    //     if(err) {
+    //         return console.log(err)
+    //     }
+    //     return res.send(rows)
+    // })
+
+    db.all(querySelectLotomania, function(err,rows) {
+        if(err) {
+            return console.log(err)
+        }
+        return res.send(rows)
+    })
+})
+
 app.post("/save-concourse", function(req, res) {
-    const queryInsert = `
-        INSERT INTO tbl_mega (concourse, date, onedozen, twodozen, tredozen, fourdozen, fivedozen, sixdozen)
+    const queryInsertMega = `
+        INSERT INTO tbl_megasena (concourse, date, onedozen, twodozen, tredozen, fourdozen, fivedozen, sixdozen)
         VALUES (?,?,?,?,?,?,?,?);
     `
+    const queryInsertQuina = `
+        INSERT INTO tbl_quina (concourse, date, onedozen, twodozen, tredozen, fourdozen, fivedozen)
+        VALUES (?,?,?,?,?,?,?);
+    `
+    const queryInsertLotofacil = `
+        INSERT INTO tbl_lotofacil (concourse, date, onedozen, twodozen, tredozen, fourdozen, fivedozen, sixdozen,
+                               sevendozen, eightdozen, ninedozen, tendozen, elevendozen, twelvedozen, thirteendozen,
+                               fourteendozen, fifteendozen)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+    `
+    const queryInsertLotomania = `
+        INSERT INTO tbl_lotomania (concourse, date, onedozen, twodozen, tredozen, fourdozen, fivedozen, sixdozen,
+                               sevendozen, eightdozen, ninedozen, tendozen, elevendozen, twelvedozen, thirteendozen,
+                               fourteendozen, fifteendozen, sixteendozen, seventeendozen, eighteendozen, nineteendozen,
+                               twentydozen)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+    `
     
-    const queryConcourseMega = "SELECT * FROM tbl_mega WHERE concourse = ?"
+    const conc = req.body.name
+    const concourse = req.body.concourse
+    const queryConcourse = `SELECT * FROM tbl_${conc} WHERE concourse = ?`
     
-    const values = [
-        req.body.concourse,
-        req.body.date,
-        req.body.onedozen,
-        req.body.twodozen,
-        req.body.tredozen,
-        req.body.fourdozen,
-        req.body.fivedozen,
-        req.body.sixdozen
-    ]
-
     function afterInsertData(err) {
         if(err) {
             return res.send(`${dt.dt()} > Save in database ${err}`)
         }
-        return res.send(`${dt.dt()} > Concourse ${values[0]}(id: ${this['lastID']}) of MEGA saved success!`)
+        return res.send(`${dt.dt()} > Concourse ${concourse}(id: ${this['lastID']}) of ${conc.toUpperCase()} saved success!`)
     }
 
-    db.all(queryConcourseMega, values[0], function(err,rows) {
+    db.all(queryConcourse, concourse, function(err,rows) {
         if(err) {
             return res.send(`${dt.dt()} > Select Concourse ${err}`)
         } else {
             if(rows.length === 0){
-                db.run(queryInsert, values, afterInsertData)
+                if(conc === 'megasena'){
+                    const values = [
+                        req.body.concourse, req.body.date,
+                        req.body.onedozen, req.body.twodozen,
+                        req.body.tredozen, req.body.fourdozen,
+                        req.body.fivedozen, req.body.sixdozen
+                    ]
+                    db.run(queryInsertMega, values, afterInsertData)
+                }else if (conc === 'quina') {
+                    const values = [
+                        req.body.concourse, req.body.date,
+                        req.body.onedozen, req.body.twodozen,
+                        req.body.tredozen, req.body.fourdozen,
+                        req.body.fivedozen
+                    ]
+                    db.run(queryInsertQuina, values, afterInsertData)
+                }else if (conc === 'lotofacil') {
+                    const values = [
+                        req.body.concourse, req.body.date,
+                        req.body.onedozen, req.body.twodozen,
+                        req.body.tredozen, req.body.fourdozen,
+                        req.body.fivedozen, req.body.sixdozen,
+                        req.body.sevendozen, req.body.eightdozen,
+                        req.body.ninedozen, req.body.tendozen,
+                        req.body.elevendozen, req.body.twelvedozen,
+                        req.body.thirteendozen, req.body.fourteendozen,
+                        req.body.fifteendozen
+                    ]
+                    db.run(queryInsertLotofacil, values, afterInsertData)
+                }else if (conc === 'lotomania') {
+                    const values = [
+                        req.body.concourse, req.body.date,
+                        req.body.onedozen, req.body.twodozen,
+                        req.body.tredozen, req.body.fourdozen,
+                        req.body.fivedozen, req.body.sixdozen,
+                        req.body.sevendozen, req.body.eightdozen,
+                        req.body.ninedozen, req.body.tendozen,
+                        req.body.elevendozen, req.body.twelvedozen,
+                        req.body.thirteendozen, req.body.fourteendozen,
+                        req.body.fifteendozen, req.body.sixteendozen,
+                        req.body.seventeendozen, req.body.eighteendozen,
+                        req.body.nineteendozen, req.body.twentydozen
+                    ]
+                    db.run(queryInsertLotomania, values, afterInsertData)
+                }
             }else {
-                return res.send(`${dt.dt()} > Concourse ${values[0]}(id: ${rows[0]['id']}) of MEGA already exists!`)
+                return res.send(`${dt.dt()} > Concourse ${concourse}(id: ${rows[0]['id']}) of ${conc.toUpperCase()} already exists!`)
             }
         }
     })
 
 })
-
-
-
 
 
 // Pages backup last concourses

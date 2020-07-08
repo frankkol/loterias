@@ -19,6 +19,7 @@ async function extractData(conc){
     await page.goto(link)
     let html = await page.content()
     const $ = await cheerio.load(html)
+    browser.close()
     
     let extractConcourseDate = $('div.content-section.section-text.with-box.no-margin-bottom > div > h2 > span').text()
     let concourseDate = regexConcourseDate.exec(extractConcourseDate);
@@ -51,17 +52,27 @@ async function extractData(conc){
 
     let dados = {name, date, concourse, dozens}
     return dados
-    browser.close()
 }
 
 // Persist Database
 async function persistDatabase(lot){
+
+    async function persist(result){
+        if(result){
+            axios.post('http://localhost:3000/save-concourse', result).then((res) => {
+                console.log(res.data)
+            })
+        }
+        return false
+    }
+
     const objdata = await extractData(json[lot])
-    let select, result = null
+    let result = null
     if(objdata.concourse != null){
         if(objdata.name === 'megasena'){
-            const values = {
+            result = {
                 concourse: objdata.concourse,
+                name: objdata.name,
                 date: objdata.date,
                 onedozen: objdata.dozens[0],
                 twodozen: objdata.dozens[1],
@@ -70,11 +81,68 @@ async function persistDatabase(lot){
                 fivedozen: objdata.dozens[4],
                 sixdozen: objdata.dozens[5]
             }
-
-            axios.post('http://localhost:3000/save-concourse', values).then((res) => {
-                console.log(res.data)
-            })
+        }else if(objdata.name === 'quina'){
+            result = {
+                concourse: objdata.concourse,
+                name: objdata.name,
+                date: objdata.date,
+                onedozen: objdata.dozens[0],
+                twodozen: objdata.dozens[1],
+                tredozen: objdata.dozens[2],
+                fourdozen: objdata.dozens[3],
+                fivedozen: objdata.dozens[4],
+            }
+        }else if(objdata.name === 'lotofacil'){
+            result = {
+                concourse: objdata.concourse,
+                name: objdata.name,
+                date: objdata.date,
+                onedozen: objdata.dozens[0],
+                twodozen: objdata.dozens[1],
+                tredozen: objdata.dozens[2],
+                fourdozen: objdata.dozens[3],
+                fivedozen: objdata.dozens[4],
+                sixdozen: objdata.dozens[5],
+                sevendozen: objdata.dozens[6],
+                eightdozen: objdata.dozens[7],
+                ninedozen: objdata.dozens[8],
+                tendozen: objdata.dozens[9],
+                elevendozen: objdata.dozens[10],
+                twelvedozen: objdata.dozens[11],
+                thirteendozen: objdata.dozens[12],
+                fourteendozen: objdata.dozens[13],
+                fifteendozen: objdata.dozens[14],
+            }
+        }else if(objdata.name === 'lotomania'){
+            result = {
+                concourse: objdata.concourse,
+                name: objdata.name,
+                date: objdata.date,
+                onedozen: objdata.dozens[0],
+                twodozen: objdata.dozens[1],
+                tredozen: objdata.dozens[2],
+                fourdozen: objdata.dozens[3],
+                fivedozen: objdata.dozens[4],
+                sixdozen: objdata.dozens[5],
+                sevendozen: objdata.dozens[6],
+                eightdozen: objdata.dozens[7],
+                ninedozen: objdata.dozens[8],
+                tendozen: objdata.dozens[9],
+                elevendozen: objdata.dozens[10],
+                twelvedozen: objdata.dozens[11],
+                thirteendozen: objdata.dozens[12],
+                fourteendozen: objdata.dozens[13],
+                fifteendozen: objdata.dozens[14],
+                sixteendozen: objdata.dozens[15],
+                seventeendozen: objdata.dozens[16],
+                eighteendozen: objdata.dozens[17],
+                nineteendozen: objdata.dozens[18],
+                twentydozen: objdata.dozens[19],
+            }
         }
+        await persist(result)
+    }else{
+        console.log(`${dt.dt()} > Error scraping data ${json[conc]['name'].toUpperCase()}`)
     }
 }
 

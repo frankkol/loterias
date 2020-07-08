@@ -5,9 +5,9 @@ const dt = require('../utils/dateTime')
 module.exports = db
 db.serialize(() => {
 
-    // // Create tables - tbl_mega, tbl_quina, tbl_lotofacil, tbl_lotomania
+    // // Create tables - tbl_mega
     // db.run(`
-    //     CREATE TABLE IF NOT EXISTS tbl_mega (
+    //     CREATE TABLE IF NOT EXISTS tbl_megasena (
     //         id INTEGER PRIMARY KEY AUTOINCREMENT,
     //         concourse INTEGER,
     //         date TEXT,
@@ -20,6 +20,71 @@ db.serialize(() => {
     //     );
     // `)
 
+    // Create tables - tbl_quina
+    // db.run(`
+    //     CREATE TABLE IF NOT EXISTS tbl_quina (
+    //         id INTEGER PRIMARY KEY AUTOINCREMENT,
+    //         concourse INTEGER,
+    //         date TEXT,
+    //         onedozen INTEGER,
+    //         twodozen INTEGER,
+    //         tredozen INTEGER,
+    //         fourdozen INTEGER,
+    //         fivedozen INTEGER
+    //     );
+    // `)
+    // Create tables - tbl_lotofacil
+    // db.run(`
+    //     CREATE TABLE IF NOT EXISTS tbl_lotofacil (
+    //         id INTEGER PRIMARY KEY AUTOINCREMENT,
+    //         concourse INTEGER,
+    //         date TEXT,
+    //         onedozen INTEGER,
+    //         twodozen INTEGER,
+    //         tredozen INTEGER,
+    //         fourdozen INTEGER,
+    //         fivedozen INTEGER,
+    //         sixdozen INTEGER,
+    //         sevendozen INTEGER,
+    //         eightdozen INTEGER,
+    //         ninedozen INTEGER,
+    //         tendozen INTEGER,
+    //         elevendozen INTEGER,
+    //         twelvedozen INTEGER,
+    //         thirteendozen INTEGER,
+    //         fourteendozen INTEGER,
+    //         fifteendozen INTEGER
+    //     );
+    // `)
+    // Create tables - tbl_lotomania
+    // db.run(`
+    //     CREATE TABLE IF NOT EXISTS tbl_lotomania (
+    //         id INTEGER PRIMARY KEY AUTOINCREMENT,
+    //         concourse INTEGER,
+    //         date TEXT,
+    //         onedozen INTEGER,
+    //         twodozen INTEGER,
+    //         tredozen INTEGER,
+    //         fourdozen INTEGER,
+    //         fivedozen INTEGER,
+    //         sixdozen INTEGER,
+    //         sevendozen INTEGER,
+    //         eightdozen INTEGER,
+    //         ninedozen INTEGER,
+    //         tendozen INTEGER,
+    //         elevendozen INTEGER,
+    //         twelvedozen INTEGER,
+    //         thirteendozen INTEGER,
+    //         fourteendozen INTEGER,
+    //         fifteendozen INTEGER,
+    //         sixteendozen INTEGER,
+    //         seventeendozen INTEGER,
+    //         eighteendozen INTEGER,
+    //         nineteendozen INTEGER,
+    //         twentydozen INTEGER
+    //     );
+    // `)
+    
     // // Query Insert Mega
     // const queryInsertMega = `
     //     INSERT INTO tbl_mega (

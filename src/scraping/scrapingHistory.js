@@ -20,6 +20,7 @@ async function extractData(conc){
     await page.goto(linkHist)
     let html = await page.content()
     const $ = await cheerio.load(html)
+    browser.close()
 
     $('body > table > tbody > tr').each((index, element) => {
         if (index === 0) {
@@ -48,13 +49,12 @@ async function extractData(conc){
         // if (index === 5) return false
     })
     return scrapedData
-    browser.close()
 }
 
 // Persist Database
 async function persistDatabase(lot){
 
-    async function persist(result, objdata){
+    async function persist(result){
         if(result){
             axios.post('http://localhost:3000/save-concourse', result).then((res) => {
                 console.log(res.data)
@@ -65,11 +65,12 @@ async function persistDatabase(lot){
 
     const arrayData = await extractData(json[lot])
     for (const [idx, objdata] of arrayData.entries()) {
-        let select, result = null
+        let result = null
         if(objdata.concourse != null){
             if(objdata.name === 'megasena'){
                 result = {
                     concourse: objdata.concourse,
+                    name: objdata.name,
                     date: objdata.date,
                     onedozen: objdata.dozens[0],
                     twodozen: objdata.dozens[1],
@@ -81,6 +82,7 @@ async function persistDatabase(lot){
             }else if(objdata.name === 'quina'){
                 result = {
                     concourse: objdata.concourse,
+                    name: objdata.name,
                     date: objdata.date,
                     onedozen: objdata.dozens[0],
                     twodozen: objdata.dozens[1],
@@ -91,6 +93,7 @@ async function persistDatabase(lot){
             }else if(objdata.name === 'lotofacil'){
                 result = {
                     concourse: objdata.concourse,
+                    name: objdata.name,
                     date: objdata.date,
                     onedozen: objdata.dozens[0],
                     twodozen: objdata.dozens[1],
@@ -111,6 +114,7 @@ async function persistDatabase(lot){
             }else if(objdata.name === 'lotomania'){
                 result = {
                     concourse: objdata.concourse,
+                    name: objdata.name,
                     date: objdata.date,
                     onedozen: objdata.dozens[0],
                     twodozen: objdata.dozens[1],
@@ -134,7 +138,7 @@ async function persistDatabase(lot){
                     twentydozen: objdata.dozens[19],
                 }
             }
-            await persist(result, objdata)
+            await persist(result)
         }else{
             console.log(`${dt.dt()} > Error scraping data ${json[conc]['name'].toUpperCase()}`)
         }

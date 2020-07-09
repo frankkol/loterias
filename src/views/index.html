@@ -12,6 +12,7 @@
   </head>
 
   <body>
+
     <div class="app header-default side-nav-dark">
       <div class="layout">
         <!-- Header START -->
@@ -81,41 +82,44 @@
 
             <div class="container-fluid">
               <div class="row">
-
                 <div class="col-lg-6 col-md-12 col-xs-12">
                   <div class="card">
                     <div class="card-body text-center">
                       <h4 class="header-title">Mega</h4>
+                      {% for result in results %}
+                      {% if loop.index == 1 %}
                       <ul class="list-inline widget-chart m-t-20 text-center">
                         <li>
-                          <h4 class="">Concurso <b>3654</b> realizado <b>20/06/2020</b></h4>
+                          <h4 class="">Concurso <b>{{ result.concourse }}</b> realizado <b>{{ result.date }}</b></h4>
                         </li>
                       </ul>
+                      
                       <div class="card-body">
 
                         <ul class="list-inline widget-chart m-t-20 text-center">
                           <li>
-                            <a class="btn btn-circle btn-success text-white">01</a>
+                            <a class="btn btn-circle btn-success text-white">{{ result.onedozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-success text-white">01</a>
+                            <a class="btn btn-circle btn-success text-white">{{ result.twodozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-success text-white">01</a>
+                            <a class="btn btn-circle btn-success text-white">{{ result.tredozen }}</a>
                           </li>
                         </ul>
                         <ul class="list-inline widget-chart m-t-20 text-center">
                           <li>
-                            <a class="btn btn-circle btn-success text-white">01</a>
+                            <a class="btn btn-circle btn-success text-white">{{ result.fourdozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-success text-white">01</a>
+                            <a class="btn btn-circle btn-success text-white">{{ result.fivedozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-success text-white">01</a>
+                            <a class="btn btn-circle btn-success text-white">{{ result.sixdozen }}</a>
                           </li>
                         </ul>
-                        
+                        {% endif %}
+                        {% endfor %}
                       </div>
                       <ul class="list-inline widget-chart m-t-20 text-center">
                         <li><a href="#">Confira outros resultados ></a></li>
@@ -127,33 +131,37 @@
                   <div class="card">
                     <div class="card-body text-center">
                       <h4 class="header-title">Quina</h4>
+                      {% for result in results %}
+                      {% if loop.index == 2 %}
                       <ul class="list-inline widget-chart m-t-20 text-center">
                         <li>
-                          <h4 class="">Concurso <b>1654</b> realizado <b>22/06/2020</b></h4>
+                          <h4 class="">Concurso <b>{{ result.concourse }}</b> realizado <b>{{ result.date }}</b></h4>
                         </li>
                       </ul>
+
                       <div class="card-body">
 
                         <ul class="list-inline widget-chart m-t-20 text-center">
                           <li>
-                            <a class="btn btn-circle btn-primary text-white">01</a>
+                            <a class="btn btn-circle btn-primary text-white">{{ result.onedozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-primary text-white">01</a>
+                            <a class="btn btn-circle btn-primary text-white">{{ result.twodozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-primary text-white">01</a>
+                            <a class="btn btn-circle btn-primary text-white">{{ result.tredozen }}</a>
                           </li>
                         </ul>
                         <ul class="list-inline widget-chart m-t-20 text-center">
                           <li>
-                            <a class="btn btn-circle btn-primary text-white">01</a>
+                            <a class="btn btn-circle btn-primary text-white">{{ result.fourdozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-primary text-white">01</a>
+                            <a class="btn btn-circle btn-primary text-white">{{ result.fivedozen }}</a>
                           </li>
                         </ul>
-                        
+                        {% endif %}
+                        {% endfor %}
                       </div>
                       <ul class="list-inline widget-chart m-t-20 text-center">
                         <li><a href="#">Confira outros resultados ></a></li>
@@ -167,65 +175,69 @@
                   <div class="card">
                     <div class="card-body text-center">
                       <h4 class="header-title">Lotofacil</h4>
+                      {% for result in results %}
+                      {% if loop.index == 3 %}
                       <ul class="list-inline widget-chart m-t-20 text-center">
                         <li>
-                          <h4 class="">Concurso <b>1254</b> realizado <b>24/06/2020</b></h4>
+                          <h4 class="">Concurso <b>{{ result.concourse }}</b> realizado <b>{{ result.date }}</b></h4>
                         </li>
                       </ul>
+
                       <div class="card-body">
 
                         <ul class="list-inline widget-chart m-t-20 text-center">
                           <li>
-                            <a class="btn btn-circle btn-warning text-white">01</a>
+                            <a class="btn btn-circle btn-warning text-white">{{ result.onedozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-warning text-white">01</a>
+                            <a class="btn btn-circle btn-warning text-white">{{ result.twodozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-warning text-white">01</a>
+                            <a class="btn btn-circle btn-warning text-white">{{ result.tredozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-warning text-white">01</a>
+                            <a class="btn btn-circle btn-warning text-white">{{ result.fourdozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-warning text-white">01</a>
+                            <a class="btn btn-circle btn-warning text-white">{{ result.fivedozen }}</a>
                           </li>
                         </ul>
                         <ul class="list-inline widget-chart m-t-20 text-center">
                           <li>
-                            <a class="btn btn-circle btn-warning text-white">01</a>
+                            <a class="btn btn-circle btn-warning text-white">{{ result.sixdozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-warning text-white">01</a>
+                            <a class="btn btn-circle btn-warning text-white">{{ result.sevendozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-warning text-white">01</a>
+                            <a class="btn btn-circle btn-warning text-white">{{ result.eightdozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-warning text-white">01</a>
+                            <a class="btn btn-circle btn-warning text-white">{{ result.ninedozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-warning text-white">01</a>
+                            <a class="btn btn-circle btn-warning text-white">{{ result.tendozen }}</a>
                           </li>
                         </ul>
                         <ul class="list-inline widget-chart m-t-20 text-center">
                           <li>
-                            <a class="btn btn-circle btn-warning text-white">01</a>
+                            <a class="btn btn-circle btn-warning text-white">{{ result.elevendozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-warning text-white">01</a>
+                            <a class="btn btn-circle btn-warning text-white">{{ result.twelvedozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-warning text-white">01</a>
+                            <a class="btn btn-circle btn-warning text-white">{{ result.thirteendozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-warning text-white">01</a>
+                            <a class="btn btn-circle btn-warning text-white">{{ result.fourteendozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-warning text-white">01</a>
+                            <a class="btn btn-circle btn-warning text-white">{{ result.fifteendozen }}</a>
                           </li>
                         </ul>
-                        
+                        {% endif %}
+                        {% endfor %}
                       </div>
                       <ul class="list-inline widget-chart m-t-20 text-center">
                         <li><a href="#">Confira outros resultados ></a></li>
@@ -237,82 +249,86 @@
                   <div class="card">
                     <div class="card-body text-center">
                       <h4 class="header-title">Lotomania</h4>
+                      {% for result in results %}
+                      {% if loop.index == 4 %}
                       <ul class="list-inline widget-chart m-t-20 text-center">
                         <li>
-                          <h4 class="">Concurso <b>1254</b> realizado <b>24/06/2020</b></h4>
+                          <h4 class="">Concurso <b>{{ result.concourse }}</b> realizado <b>{{ result.date }}</b></h4>
                         </li>
                       </ul>
+
                       <div class="card-body">
 
                         <ul class="list-inline widget-chart m-t-20 text-center">
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.onedozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.twodozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.tredozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.fourdozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.fivedozen }}</a>
                           </li>
                         </ul>
                         <ul class="list-inline widget-chart m-t-20 text-center">
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.sixdozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.sevendozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.eightdozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.ninedozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.tendozen }}</a>
                           </li>
                         </ul>
                         <ul class="list-inline widget-chart m-t-20 text-center">
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.elevendozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.twelvedozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.thirteendozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.fourteendozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.fifteendozen }}</a>
                           </li>
                         </ul>
                         <ul class="list-inline widget-chart m-t-20 text-center">
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.sixteendozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.seventeendozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.eighteendozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.nineteendozen }}</a>
                           </li>
                           <li>
-                            <a class="btn btn-circle btn-danger text-white">01</a>
+                            <a class="btn btn-circle btn-danger text-white">{{ result.twentydozen }}</a>
                           </li>
                         </ul>
-                        
+                        {% endif %}
+                        {% endfor %}
                       </div>
                       <ul class="list-inline widget-chart m-t-20 text-center">
                         <li><a href="#">Confira outros resultados ></a></li>
@@ -321,6 +337,7 @@
                   </div>
                 </div>
               </div>
+              
             </div>
           </div>
           <!-- Content Wrapper END -->

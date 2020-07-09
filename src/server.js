@@ -1,10 +1,16 @@
 // Imports
 const express = require('express')
 require('dotenv').config()
+const nunjucks = require('nunjucks')
 const app = express()
 const db = require('./database/db')
 const dt = require('../src/utils/dateTime')
 const bodyParser = require('body-parser')
+
+nunjucks.configure("src/views", {
+    express: app,
+    noCache: true,
+})
 
 // Parser JSON in Form-data
 app.use(bodyParser.json())
@@ -18,7 +24,30 @@ app.use('/img', express.static(__dirname + 'public/assets/img'))
 
 // Dynamic routes
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/views/index.html')
+    let list = []   
+    db.serialize(() => {
+        db.get(`SELECT * FROM tbl_megasena WHERE concourse = (SELECT MAX(concourse) FROM tbl_megasena)`, function(err,row) {
+            if(err) return console.log(err)
+            list.push(row)
+        })
+
+        db.get(`SELECT * FROM tbl_quina WHERE concourse = (SELECT MAX(concourse) FROM tbl_quina)`, function(err,row) {
+            if(err) return console.log(err)
+            list.push(row)
+        })
+
+        db.get(`SELECT * FROM tbl_lotofacil WHERE concourse = (SELECT MAX(concourse) FROM tbl_lotofacil)`, function(err,row) {
+            if(err) return console.log(err)
+            list.push(row)
+        })
+
+        db.get(`SELECT * FROM tbl_lotomania WHERE concourse = (SELECT MAX(concourse) FROM tbl_lotomania)`, function(err,row) {
+            if(err) return console.log(err)
+            list.push(row)
+            // return res.send(list)
+            return res.render("index.html", { results: list })
+        })
+    })
 })
 
 app.get("/search-results", function(req, res) {
@@ -43,37 +72,28 @@ app.get("/search-all-results", function(req, res) {
 })
 
 app.get("/search-last-results", function(req, res) {
-    const querySelectMega = `SELECT * FROM tbl_megasena WHERE concourse = (SELECT MAX(concourse) FROM tbl_megasena)`
-    const querySelectQuina = `SELECT * FROM tbl_quina WHERE concourse = (SELECT MAX(concourse) FROM tbl_quina)`
-    const querySelectLotofacil = `SELECT * FROM tbl_lotofacil WHERE concourse = (SELECT MAX(concourse) FROM tbl_lotofacil)`
-    const querySelectLotomania = `SELECT * FROM tbl_lotomania WHERE concourse = (SELECT MAX(concourse) FROM tbl_lotomania)`
+    let list = []   
+    db.serialize(() => {
+        db.get(`SELECT * FROM tbl_megasena WHERE concourse = (SELECT MAX(concourse) FROM tbl_megasena)`, function(err,row) {
+            if(err) return console.log(err)
+            list.push(row)
+        })
 
-    // db.all(querySelectMega, function(err,rows) {
-    //     if(err) {
-    //         return console.log(err)
-    //     }
-    //     return res.send(rows)
-    // })
+        db.get(`SELECT * FROM tbl_quina WHERE concourse = (SELECT MAX(concourse) FROM tbl_quina)`, function(err,row) {
+            if(err) return console.log(err)
+            list.push(row)
+        })
 
-    // db.all(querySelectQuina, function(err,rows) {
-    //     if(err) {
-    //         return console.log(err)
-    //     }
-    //     return res.send(rows)
-    // })
+        db.get(`SELECT * FROM tbl_lotofacil WHERE concourse = (SELECT MAX(concourse) FROM tbl_lotofacil)`, function(err,row) {
+            if(err) return console.log(err)
+            list.push(row)
+        })
 
-    // db.all(querySelectLotofacil, function(err,rows) {
-    //     if(err) {
-    //         return console.log(err)
-    //     }
-    //     return res.send(rows)
-    // })
-
-    db.all(querySelectLotomania, function(err,rows) {
-        if(err) {
-            return console.log(err)
-        }
-        return res.send(rows)
+        db.get(`SELECT * FROM tbl_lotomania WHERE concourse = (SELECT MAX(concourse) FROM tbl_lotomania)`, function(err,row) {
+            if(err) return console.log(err)
+            list.push(row)
+            return res.send(list)
+        })
     })
 })
 

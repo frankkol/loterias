@@ -205,7 +205,7 @@ app.get('/lotomania', (req, res) => {
 })
 
 // Start the server
-const PORT = process.env.SERVER_PORT || 5000
+const PORT = process.env.SERVER_PORT || 3000
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT} -> http://localhost:${PORT}`)
 })
